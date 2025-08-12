@@ -10,19 +10,19 @@ export const Features: React.FC<FeaturesProps> = ({ variant }) => {
     {
       icon: Camera,
       title: "Snap & Upload",
-      description: "Take photos with your phone or upload from gallery. Multiple objects per photo supported.",
+      description: "Snap photos or upload from your gallery. Our AI handles multiple angles and lighting conditions.",
       gif: "📸 GIF: User taking photo of vintage items at garage sale"
     },
     {
       icon: Scissors,
       title: "Smart Object Detection",
-      description: "AI automatically identifies and segments individual items in cluttered photos.",
+      description: "Multiple items in one photo? No problem. Our AI identifies and segments individual items in cluttered photos.",
       gif: "✂️ GIF: Photo being automatically segmented into individual objects"
     },
     {
       icon: MessageCircle,
       title: "Interactive AI Chat",
-      description: "Refine appraisals through conversation. Ask about condition, rarity, or market trends.",
+      description: "Refine appraisals through conversation. Add context, additional photos, or other information to narrow the price range.",
       gif: "💬 GIF: Chat interface showing price refinements based on condition"
     },
     {
@@ -34,13 +34,13 @@ export const Features: React.FC<FeaturesProps> = ({ variant }) => {
     {
       icon: Layout,
       title: "Item Dashboard",
-      description: "Track your finds, profits, and inventory in one organized place.",
+      description: "Track all your finds in one organized place. Revisit each one to refine, update, or post for sale.",
       gif: "📋 GIF: Dashboard showing tracked items with profit calculations"
     },
     {
       icon: Share2,
-      title: "Multi-Platform Posting",
-      description: "List items on eBay, Etsy, Facebook Marketplace, and more with one click.",
+      title: "One-Click Listings",
+      description: "Post to eBay, Etsy, Cherished, and more, with optimized titles and descriptions. Turn appraisal photos into listing photos instantly.",
       gif: "🚀 GIF: Single item being posted to multiple platforms simultaneously"
     }
   ];
@@ -96,7 +96,7 @@ export const Features: React.FC<FeaturesProps> = ({ variant }) => {
         <div className="text-center mb-16">
           <div className="inline-flex items-center px-4 py-2 bg-[#00B49F]/10 rounded-full mb-6">
             <span className="text-sm font-medium text-[#00B49F]">
-              ✨ Powered by Advanced AI
+              ✨ Powered by Advanced AI + Real Comps
             </span>
           </div>
           <h2 className="text-3xl lg:text-4xl font-semibold text-[#102A43] mb-6 font-['Clash_Display']">
@@ -104,7 +104,7 @@ export const Features: React.FC<FeaturesProps> = ({ variant }) => {
           </h2>
           <p className="text-lg text-[#636E72] max-w-2xl mx-auto">
             {variant === 'b2c' 
-              ? "From photo to profit in seconds. Our AI does the heavy lifting so you can focus on finding great deals."
+              ? "From photo to price tag in seconds. Our AI does the heavy lifting so you can focus on finding great deals."
               : "Streamline operations, reduce errors, and maximize profitability with AI-powered inventory intelligence."
             }
           </p>
@@ -150,14 +150,14 @@ export const Features: React.FC<FeaturesProps> = ({ variant }) => {
           <div className="bg-gradient-to-r from-[#FF5A3D]/10 via-[#FFCC3D]/10 to-[#00B49F]/10 rounded-2xl p-8 border border-[#FF5A3D]/20">
             <h3 className="text-2xl font-semibold text-[#102A43] mb-4 font-['Clash_Display']">
               {variant === 'b2c' 
-                ? "Ready to turn photos into profit?"
+                ? "Ready to turn photos into price tags?"
                 : "Ready to scale your business with AI?"
               }
             </h3>
             <p className="text-[#636E72] mb-6 max-w-2xl mx-auto">
               {variant === 'b2c'
-                ? "Join 2,300+ resellers who are already finding hidden treasures with Resellers Radar."
-                : "Join 150+ businesses already using AI to optimize their inventory and pricing strategies."
+                ? "Join resellers who are finding hidden treasures with Resellers Radar."
+                : "Join businesses already using AI to optimize their inventory and pricing strategies."
               }
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

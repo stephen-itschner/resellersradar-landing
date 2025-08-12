@@ -13,7 +13,7 @@ export const FoundingMemberBenefits: React.FC = () => {
       icon: Users,
       title: "Limited to 30 Spots",
       description: "Join an exclusive group of founding members with direct access to our team",
-      highlight: "Only 7 Left"
+      highlight: "Only 22 Left"
     },
     {
       icon: Percent,
@@ -99,17 +99,17 @@ export const FoundingMemberBenefits: React.FC = () => {
           <div className="flex items-center justify-center space-x-4 mb-4">
             <div className="w-3 h-3 bg-[#FFCC3D] rounded-full animate-pulse"></div>
             <span className="text-white font-semibold text-lg">
-              Only 7 Founding Member Spots Remaining
+              Only 22 Founding Member Spots Remain
             </span>
             <div className="w-3 h-3 bg-[#FFCC3D] rounded-full animate-pulse"></div>
           </div>
           
           <h3 className="text-2xl lg:text-3xl font-semibold text-white mb-4 font-['Clash_Display']">
-            Secure Your Spot for $30/month
+            Secure Your Spot for only $30 the first month
           </h3>
           
           <p className="text-white/90 mb-6 max-w-2xl mx-auto">
-            No payment until launch. Cancel anytime. Lock in lifetime 30% discount now.
+            No payment until launch. Cancel anytime. Lock in a lifetime 30% discount now.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -121,22 +121,7 @@ export const FoundingMemberBenefits: React.FC = () => {
             </button>
           </div>
 
-          {/* Trust Indicators */}
-          <div className="flex items-center justify-center space-x-8 mt-8 pt-6 border-t border-white/20">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-white font-['IBM_Plex_Mono']">2,300+</div>
-              <div className="text-sm text-white/70">Beta Users</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-white font-['IBM_Plex_Mono']">4.9/5</div>
-              <div className="text-sm text-white/70">Rating</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-white font-['IBM_Plex_Mono']">$127</div>
-              <div className="text-sm text-white/70">Avg. Profit</div>
-            </div>
-          </div>
-        </div>
+                  </div>
       </div>
     </section>
   );

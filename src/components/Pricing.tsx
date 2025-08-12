@@ -15,7 +15,6 @@ export const Pricing: React.FC<PricingProps> = ({ variant }) => {
       features: [
         "Early access notification",
         "Product updates",
-        "Launch day discount",
         "No commitment"
       ],
       cta: "Join Waitlist",
@@ -25,36 +24,33 @@ export const Pricing: React.FC<PricingProps> = ({ variant }) => {
     {
       name: "Founding Member",
       price: "$30",
-      period: "/month",
+      period: " first month",
       originalPrice: "$49",
-      description: "Limited to 30 spots - 7 remaining",
+      description: "Limited to 30 spots - 22 remaining",
       features: [
-        "Everything in Pro plan",
-        "Lifetime 30% discount",
+        "Everything in Standard plan",
+        "Lifetime 30% discount, any plan",
         "Early access to features",
         "Direct input on development",
         "Priority support",
-        "No charge until launch",
+        "No charges until launch day",
         "Cancel anytime"
       ],
       cta: "Secure Your Spot",
       popular: true,
       ctaStyle: "primary",
-      badge: "Only 7 Left"
+      badge: "Only 22 Left"
     },
     {
-      name: "Pro (Future)",
-      price: "$49",
+      name: "Standard (Future)",
+      price: "$49+",
       period: "/month",
       description: "Full access when we launch",
       features: [
-        "Unlimited photo appraisals",
+        "Basic photo appraisals",
         "Multi-object detection",
         "Interactive AI chat",
-        "Market data & trends",
-        "Multi-platform posting",
-        "Item tracking dashboard",
-        "Email support"
+        "Market data & trends"
       ],
       cta: "Available at Launch",
       popular: false,
@@ -64,9 +60,24 @@ export const Pricing: React.FC<PricingProps> = ({ variant }) => {
 
   const b2bPlans = [
     {
-      name: "Starter",
+      name: "Waitlist",
+      price: "Free",
+      period: "",
+      description: "Get notified when we launch",
+      features: [
+        "Early access notification",
+        "Product updates",
+        "No commitment"
+      ],
+      cta: "Join Waitlist",
+      popular: false,
+      ctaStyle: "border"
+    },
+    {
+      name: "Founding Member",
       price: "$199",
       period: "/month",
+      originalPrice: "$299",
       description: "Perfect for small businesses",
       features: [
         "Up to 1,000 appraisals/month",
@@ -75,26 +86,7 @@ export const Pricing: React.FC<PricingProps> = ({ variant }) => {
         "Email support",
         "Basic analytics"
       ],
-      cta: "Start Free Trial",
-      popular: false,
-      ctaStyle: "border"
-    },
-    {
-      name: "Business",
-      price: "$499",
-      period: "/month",
-      originalPrice: "$699",
-      description: "Most popular for growing businesses",
-      features: [
-        "Up to 10,000 appraisals/month",
-        "Advanced team features",
-        "All platform integrations",
-        "Priority support",
-        "Advanced analytics",
-        "Custom workflows",
-        "API access"
-      ],
-      cta: "Start Free Trial",
+      cta: "Secure Your Spot - $30 first month",
       popular: true,
       ctaStyle: "primary",
       badge: "Most Popular"
@@ -105,13 +97,11 @@ export const Pricing: React.FC<PricingProps> = ({ variant }) => {
       period: "",
       description: "For large-scale operations",
       features: [
-        "Unlimited appraisals",
+        "Up to unlimited appraisals",
         "White-label options",
         "Custom integrations",
         "Dedicated support",
         "Advanced security",
-        "SLA guarantees",
-        "On-premise deployment"
       ],
       cta: "Contact Sales",
       popular: false,
@@ -141,7 +131,7 @@ export const Pricing: React.FC<PricingProps> = ({ variant }) => {
           <p className="text-lg text-[#636E72] max-w-2xl mx-auto">
             {variant === 'b2c'
               ? "Start free or secure your founding member benefits. No hidden fees, cancel anytime."
-              : "Flexible pricing that grows with your business. All plans include free trial and setup."
+              : "Flexible pricing that grows with your business. All plans include free demo and setup."
             }
           </p>
         </div>
@@ -223,8 +213,8 @@ export const Pricing: React.FC<PricingProps> = ({ variant }) => {
               </span>
             </div>
             <p className="text-[#636E72] mb-6 max-w-2xl mx-auto">
-              Join 23 other founding members who've already secured their lifetime discount. 
-              Only 7 spots remain at this exclusive price.
+              Join 8 other founding members who've already secured their lifetime discount. 
+              Only 22 spots remain at this exclusive price.
             </p>
             <div className="flex items-center justify-center space-x-8">
               <div className="text-center">
@@ -236,7 +226,7 @@ export const Pricing: React.FC<PricingProps> = ({ variant }) => {
                 <div className="text-sm text-[#636E72]">Until Launch</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-[#00B49F] font-['IBM_Plex_Mono']">7</div>
+                <div className="text-2xl font-bold text-[#00B49F] font-['IBM_Plex_Mono']">22</div>
                 <div className="text-sm text-[#636E72]">Spots Left</div>
               </div>
             </div>
@@ -250,9 +240,6 @@ export const Pricing: React.FC<PricingProps> = ({ variant }) => {
               We work with businesses of all sizes. Contact our team to discuss 
               custom pricing, integrations, and enterprise features.
             </p>
-            <button className="px-8 py-4 bg-[#102A43] text-white rounded-xl hover:bg-[#102A43]/90 transition-all duration-200 font-semibold">
-              Schedule a Demo
-            </button>
           </div>
         )}
       </div>
