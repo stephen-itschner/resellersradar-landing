@@ -12,29 +12,33 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#F8F5F0]">
-      {/* Variant Toggle for Demo */}
-      <div className="fixed top-4 right-4 z-50 bg-white rounded-lg shadow-lg p-2 border border-gray-200">
-        <div className="flex space-x-2">
-          <button
-            onClick={() => setCurrentVariant('b2c')}
-            className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-              currentVariant === 'b2c'
-                ? 'bg-[#FF5A3D] text-white'
-                : 'text-[#636E72] hover:text-[#102A43]'
-            }`}
-          >
-            B2C
-          </button>
-          <button
-            onClick={() => setCurrentVariant('b2b')}
-            className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-              currentVariant === 'b2b'
-                ? 'bg-[#FF5A3D] text-white'
-                : 'text-[#636E72] hover:text-[#102A43]'
-            }`}
-          >
-            B2B
-          </button>
+      {/* Variant Toggle (desktop-only, subtle) */}
+      <div className="fixed top-2 right-2 z-[9999] hidden md:block">
+        <div className="bg-white/75 backdrop-blur rounded-md border border-gray-200 shadow p-1 text-xs opacity-80 hover:opacity-100 transition-opacity">
+          <div className="flex space-x-1">
+            <button
+              onClick={() => setCurrentVariant('b2c')}
+              aria-label="Switch to B2C"
+              className={`px-2 py-0.5 rounded transition-colors ${
+                currentVariant === 'b2c'
+                  ? 'bg-[#FF5A3D] text-white'
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              B2C
+            </button>
+            <button
+              onClick={() => setCurrentVariant('b2b')}
+              aria-label="Switch to B2B"
+              className={`px-2 py-0.5 rounded transition-colors ${
+                currentVariant === 'b2b'
+                  ? 'bg-[#FF5A3D] text-white'
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              B2B
+            </button>
+          </div>
         </div>
       </div>
 
