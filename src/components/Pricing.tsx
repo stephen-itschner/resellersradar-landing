@@ -23,9 +23,9 @@ export const Pricing: React.FC<PricingProps> = ({ variant }) => {
     },
     {
       name: "Founding Member",
-      price: "$30",
+      price: "$1",
       period: " first month",
-      originalPrice: "$49",
+      originalPrice: "$10",
       description: "Limited to 30 spots - 22 remaining",
       features: [
         "Everything in Standard plan",
@@ -43,7 +43,7 @@ export const Pricing: React.FC<PricingProps> = ({ variant }) => {
     },
     {
       name: "Standard (Future)",
-      price: "$49+",
+      price: "$10+",
       period: "/month",
       description: "Full access when we launch",
       features: [
@@ -86,7 +86,7 @@ export const Pricing: React.FC<PricingProps> = ({ variant }) => {
         "Email support",
         "Basic analytics"
       ],
-      cta: "Secure Your Spot - $30 first month",
+      cta: "Secure Your Spot - $1 first month",
       popular: true,
       ctaStyle: "primary",
       badge: "Most Popular"

@@ -18,7 +18,7 @@ export const FoundingMemberBenefits: React.FC = () => {
     {
       icon: Percent,
       title: "Lifetime 30% Discount",
-      description: "Lock in 30% off forever, plus your first month for just $30",
+      description: "Lock in 30% off forever, plus your first month for just $1",
       highlight: "Save $100s"
     },
     {
@@ -105,7 +105,7 @@ export const FoundingMemberBenefits: React.FC = () => {
           </div>
           
           <h3 className="text-2xl lg:text-3xl font-semibold text-white mb-4 font-['Clash_Display']">
-            Secure Your Spot for only $30 the first month
+            Secure Your Spot for only $1 the first month
           </h3>
           
           <p className="text-white/90 mb-6 max-w-2xl mx-auto">

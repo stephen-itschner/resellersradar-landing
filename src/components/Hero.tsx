@@ -1,5 +1,5 @@
 import React from 'react';
-import { Zap, TrendingUp, Users, CheckCircle } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 
 interface HeroProps {
   variant: 'b2c' | 'b2b';
@@ -101,14 +101,15 @@ export const Hero: React.FC<HeroProps> = ({ variant }) => {
             </div>
           </div>
 
-          {/* Visual/Demo Placeholder */}
+          {/* Video Demo */}
           <div className="relative">
             <div className="bg-white rounded-2xl shadow-2xl p-4 border border-gray-100 flex items-center justify-center min-h-[300px]">
-              {/* Replace this with actual <video> or <img> for your GIF */}
-              <div className="text-center text-[#636E72]">
-                <p className="mb-2 font-semibold">[ Feature Demo Placeholder ]</p>
-                <p className="text-sm">Embed GIF or short video here</p>
-              </div>
+              <video
+                src="/heroVideo.mp4"
+		autoplay
+                controls
+                className="rounded-xl w-full h-auto"
+             />
             </div>
           </div>
         </div>

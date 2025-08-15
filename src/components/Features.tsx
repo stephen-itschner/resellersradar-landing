@@ -65,7 +65,7 @@ export const Features: React.FC<FeaturesProps> = ({ variant }) => {
       icon: Share2,
       title: 'One-Click Listings',
       description:
-        'Post to eBay, Etsy, Cherished, and more, with optimized titles and descriptions. Turn appraisal photos into listing photos instantly.',
+        'Post to eBay, Etsy, and more, with optimized titles and descriptions. Turn appraisal photos into listing photos seamlessly.',
       image: '/sellForTopDollar.png',
     },
   ];
