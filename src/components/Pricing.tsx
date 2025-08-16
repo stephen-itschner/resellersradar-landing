@@ -1,8 +1,33 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Check, Star, Zap, Crown } from 'lucide-react';
+import { startFoundingMemberCheckout, getUTMs } from '../utils/checkout';
 
 interface PricingProps {
   variant: 'b2c' | 'b2b';
+}
+
+const TALLY_WAITLIST_BASE = 'https://tally.so/r/mYA16J';
+
+function getUtmParams(): Record<string, string> {
+  if (typeof window === 'undefined') return {};
+  const qp = new URLSearchParams(window.location.search);
+  const fields = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'] as const;
+  const out: Record<string, string> = {};
+  for (const key of fields) {
+    const v = qp.get(key);
+    if (v) out[key] = v;
+  }
+  return out;
+}
+
+function buildUrl(base: string, params: Record<string, string | undefined>): string {
+  const u = new URL(base);
+  const sp = new URLSearchParams();
+  for (const [k, v] of Object.entries(params)) {
+    if (v != null && v !== '') sp.set(k, v);
+  }
+  u.search = sp.toString();
+  return u.toString();
 }
 
 export const Pricing: React.FC<PricingProps> = ({ variant }) => {
@@ -12,11 +37,7 @@ export const Pricing: React.FC<PricingProps> = ({ variant }) => {
       price: "Free",
       period: "",
       description: "Get notified when we launch",
-      features: [
-        "Early access notification",
-        "Product updates",
-        "No commitment"
-      ],
+      features: ["Early access notification", "Product updates", "No commitment"],
       cta: "Join Waitlist",
       popular: false,
       ctaStyle: "border"
@@ -64,11 +85,7 @@ export const Pricing: React.FC<PricingProps> = ({ variant }) => {
       price: "Free",
       period: "",
       description: "Get notified when we launch",
-      features: [
-        "Early access notification",
-        "Product updates",
-        "No commitment"
-      ],
+      features: ["Early access notification", "Product updates", "No commitment"],
       cta: "Join Waitlist",
       popular: false,
       ctaStyle: "border"
@@ -101,7 +118,7 @@ export const Pricing: React.FC<PricingProps> = ({ variant }) => {
         "White-label options",
         "Custom integrations",
         "Dedicated support",
-        "Advanced security",
+        "Advanced security"
       ],
       cta: "Contact Sales",
       popular: false,
@@ -110,6 +127,33 @@ export const Pricing: React.FC<PricingProps> = ({ variant }) => {
   ];
 
   const plans = variant === 'b2c' ? b2cPlans : b2bPlans;
+
+  const waitlistUrl = useMemo(() => {
+    const utm = getUtmParams();
+    const params: Record<string, string> = {
+      utm_source: utm.utm_source ?? 'direct',
+      utm_medium: utm.utm_medium ?? 'website',
+      utm_campaign: utm.utm_campaign ?? 'waitlist',
+      ...(utm.utm_term ? { utm_term: utm.utm_term } : {}),
+      ...(utm.utm_content ? { utm_content: utm.utm_content } : {}),
+      page_variant: 'pricing_waitlist_cta',
+      audience_pitch: variant === 'b2c' ? 'consumer' : 'business',
+    };
+    return buildUrl(TALLY_WAITLIST_BASE, params);
+  }, [variant]);
+
+  const onCheckout = async (where: string) => {
+    try {
+      await startFoundingMemberCheckout({
+        ...getUTMs(),
+        page_variant: where,
+        audience_pitch: variant === 'b2c' ? 'consumer' : 'business',
+      });
+    } catch (e: any) {
+      console.error('Checkout error (pricing):', e?.message || e);
+      alert(e?.message || 'Checkout failed');
+    }
+  };
 
   return (
     <section id="pricing" className="py-20 bg-[#F8F5F0]">
@@ -123,10 +167,7 @@ export const Pricing: React.FC<PricingProps> = ({ variant }) => {
             </span>
           </div>
           <h2 className="text-3xl lg:text-4xl font-semibold text-[#102A43] mb-6 font-['Clash_Display']">
-            {variant === 'b2c' 
-              ? "Choose Your Path to Profit"
-              : "Scale Your Business with AI"
-            }
+            {variant === 'b2c' ? "Choose Your Path to Profit" : "Scale Your Business with AI"}
           </h2>
           <p className="text-lg text-[#636E72] max-w-2xl mx-auto">
             {variant === 'b2c'
@@ -138,69 +179,117 @@ export const Pricing: React.FC<PricingProps> = ({ variant }) => {
 
         {/* Pricing Cards */}
         <div className="grid md:grid-cols-3 gap-8 mb-16">
-          {plans.map((plan, index) => (
-            <div 
-              key={index}
-              className={`relative bg-white rounded-2xl p-8 border-2 transition-all duration-300 hover:shadow-xl ${
-                plan.popular 
-                  ? 'border-[#FF5A3D] shadow-lg scale-105' 
-                  : 'border-gray-200 hover:border-[#FF5A3D]/30'
-              }`}
-            >
-              {/* Badge */}
-              {plan.badge && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <div className="bg-[#FF5A3D] text-white px-4 py-2 rounded-full text-sm font-semibold flex items-center">
-                    {plan.popular && <Crown className="w-4 h-4 mr-1" />}
-                    {plan.badge}
-                  </div>
-                </div>
-              )}
+          {plans.map((plan, index) => {
+            const isPrimary = plan.ctaStyle === 'primary';
+            const isBorder = plan.ctaStyle === 'border';
+            const isDisabled = plan.ctaStyle === 'disabled';
 
-              {/* Header */}
-              <div className="text-center mb-8">
-                <h3 className="text-xl font-semibold text-[#102A43] mb-2 font-['Clash_Display']">
-                  {plan.name}
-                </h3>
-                <div className="mb-4">
-                  {plan.originalPrice && (
-                    <span className="text-lg text-[#636E72] line-through mr-2">
-                      {plan.originalPrice}
-                    </span>
-                  )}
-                  <span className="text-4xl font-bold text-[#102A43] font-['IBM_Plex_Mono']">
-                    {plan.price}
-                  </span>
-                  <span className="text-[#636E72]">{plan.period}</span>
-                </div>
-                <p className="text-[#636E72]">{plan.description}</p>
-              </div>
+            let ctaEl: React.ReactNode;
+            if (isPrimary) {
+              // Checkout
+              const pv = `pricing_card_${plan.name.replace(/\s+/g, '_').toLowerCase()}_primary`;
+              ctaEl = (
+                <button
+                  onClick={() => onCheckout(pv)}
+                  className="w-full py-4 rounded-xl font-semibold transition-all duration-200 bg-[#FF5A3D] text-white hover:bg-[#FF5A3D]/90 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                >
+                  {plan.cta}
+                </button>
+              );
+            } else if (isBorder) {
+              if (plan.cta.toLowerCase().includes('waitlist')) {
+                // Waitlist link (Tally) — make it full width by making it block-level
+                ctaEl = (
+                  <a
+                    href={waitlistUrl}
+                    className="block w-full py-4 rounded-xl font-semibold transition-all duration-200 border-2 border-[#102A43] text-[#102A43] hover:bg-[#102A43] hover:text-white text-center"
+                  >
+                    {plan.cta}
+                  </a>
+                );
+              } else if (plan.cta.toLowerCase().includes('contact sales')) {
+                // Enterprise contact — full width as well
+                ctaEl = (
+                  <a
+                    href="mailto:support@resellersradar.com?subject=Enterprise%20Inquiry"
+                    className="block w-full py-4 rounded-xl font-semibold transition-all duration-200 border-2 border-[#102A43] text-[#102A43] hover:bg-[#102A43] hover:text-white text-center"
+                  >
+                    {plan.cta}
+                  </a>
+                );
+              } else {
+                // Fallback border button — full width
+                ctaEl = (
+                  <button
+                    className="w-full py-4 rounded-xl font-semibold transition-all duration-200 border-2 border-[#102A43] text-[#102A43] hover:bg-[#102A43] hover:text-white"
+                  >
+                    {plan.cta}
+                  </button>
+                );
+              }
+            } else {
+              // Disabled plan
+              ctaEl = (
+                <button
+                  className="w-full py-4 rounded-xl font-semibold transition-all duration-200 bg-gray-100 text-[#636E72] cursor-not-allowed"
+                  disabled={isDisabled}
+                >
+                  {plan.cta}
+                </button>
+              );
+            }
 
-              {/* Features */}
-              <div className="space-y-4 mb-8">
-                {plan.features.map((feature, featureIndex) => (
-                  <div key={featureIndex} className="flex items-start">
-                    <Check className="w-5 h-5 text-[#2F9D52] mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-[#636E72]">{feature}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* CTA */}
-              <button 
-                className={`w-full py-4 rounded-xl font-semibold transition-all duration-200 ${
-                  plan.ctaStyle === 'primary'
-                    ? 'bg-[#FF5A3D] text-white hover:bg-[#FF5A3D]/90 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
-                    : plan.ctaStyle === 'border'
-                    ? 'border-2 border-[#102A43] text-[#102A43] hover:bg-[#102A43] hover:text-white'
-                    : 'bg-gray-100 text-[#636E72] cursor-not-allowed'
+            return (
+              <div
+                key={index}
+                className={`relative bg-white rounded-2xl p-8 border-2 transition-all duration-300 hover:shadow-xl ${
+                  plan.popular ? 'border-[#FF5A3D] shadow-lg scale-105' : 'border-gray-200 hover:border-[#FF5A3D]/30'
                 }`}
-                disabled={plan.ctaStyle === 'disabled'}
               >
-                {plan.cta}
-              </button>
-            </div>
-          ))}
+                {/* Badge */}
+                {plan.badge && (
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                    <div className="bg-[#FF5A3D] text-white px-4 py-2 rounded-full text-sm font-semibold flex items-center">
+                      {plan.popular && <Crown className="w-4 h-4 mr-1" />}
+                      {plan.badge}
+                    </div>
+                  </div>
+                )}
+
+                {/* Header */}
+                <div className="text-center mb-8">
+                  <h3 className="text-xl font-semibold text-[#102A43] mb-2 font-['Clash_Display']">
+                    {plan.name}
+                  </h3>
+                  <div className="mb-4">
+                    {plan.originalPrice && (
+                      <span className="text-lg text-[#636E72] line-through mr-2">
+                        {plan.originalPrice}
+                      </span>
+                    )}
+                    <span className="text-4xl font-bold text-[#102A43] font-['IBM_Plex_Mono']">
+                      {plan.price}
+                    </span>
+                    <span className="text-[#636E72]">{plan.period}</span>
+                  </div>
+                  <p className="text-[#636E72]">{plan.description}</p>
+                </div>
+
+                {/* Features */}
+                <div className="space-y-4 mb-8">
+                  {plan.features.map((feature, featureIndex) => (
+                    <div key={featureIndex} className="flex items-start">
+                      <Check className="w-5 h-5 text-[#2F9D52] mr-3 mt-0.5 flex-shrink-0" />
+                      <span className="text-[#636E72]">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* CTA */}
+                {ctaEl}
+              </div>
+            );
+          })}
         </div>
 
         {/* Bottom Section */}

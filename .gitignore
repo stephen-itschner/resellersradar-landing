@@ -23,3 +23,17 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+# Local Netlify folder
+.netlify
+
+# Build output
+dist/
+
+# Netlify CLI artifacts
+.netlify/
+
+# Node & misc
+node_modules/
+*.log
+.DS_Store

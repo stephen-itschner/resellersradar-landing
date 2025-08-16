@@ -1,5 +1,30 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Crown, Users, Percent, Calendar, Shield, Zap } from 'lucide-react';
+import { startFoundingMemberCheckout, getUTMs } from '../utils/checkout';
+
+const TALLY_WAITLIST_BASE = 'https://tally.so/r/mYA16J';
+
+function getUtmParams(): Record<string, string> {
+  if (typeof window === 'undefined') return {};
+  const qp = new URLSearchParams(window.location.search);
+  const fields = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'] as const;
+  const out: Record<string, string> = {};
+  for (const key of fields) {
+    const v = qp.get(key);
+    if (v) out[key] = v;
+  }
+  return out;
+}
+
+function buildUrl(base: string, params: Record<string, string | undefined>): string {
+  const u = new URL(base);
+  const sp = new URLSearchParams();
+  for (const [k, v] of Object.entries(params)) {
+    if (v != null && v !== '') sp.set(k, v);
+  }
+  u.search = sp.toString();
+  return u.toString();
+}
 
 export const FoundingMemberBenefits: React.FC = () => {
   const benefits = [
@@ -40,6 +65,33 @@ export const FoundingMemberBenefits: React.FC = () => {
       highlight: "VIP Access"
     }
   ];
+
+  const tallyWaitlistUrl = useMemo(() => {
+    const utm = getUtmParams();
+    const params: Record<string, string> = {
+      utm_source: utm.utm_source ?? 'direct',
+      utm_medium: utm.utm_medium ?? 'website',
+      utm_campaign: utm.utm_campaign ?? 'waitlist',
+      ...(utm.utm_term ? { utm_term: utm.utm_term } : {}),
+      ...(utm.utm_content ? { utm_content: utm.utm_content } : {}),
+      page_variant: 'benefits_cta_secondary',
+      audience_pitch: 'consumer',
+    };
+    return buildUrl(TALLY_WAITLIST_BASE, params);
+  }, []);
+
+  const onCheckout = async () => {
+    try {
+      await startFoundingMemberCheckout({
+        ...getUTMs(),
+        page_variant: 'benefits_cta_primary',
+        audience_pitch: 'consumer',
+      });
+    } catch (e: any) {
+      console.error('Checkout error (benefits):', e?.message || e);
+      alert(e?.message || 'Checkout failed');
+    }
+  };
 
   return (
     <section className="py-20 bg-gradient-to-br from-[#102A43] to-[#102A43]/90 relative overflow-hidden">
@@ -113,15 +165,20 @@ export const FoundingMemberBenefits: React.FC = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-8 py-4 bg-white text-[#FF5A3D] rounded-xl hover:bg-white/90 transition-all duration-200 font-bold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+            <button
+              onClick={onCheckout}
+              className="px-8 py-4 bg-white text-[#FF5A3D] rounded-xl hover:bg-white/90 transition-all duration-200 font-bold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            >
               Become a Founding Member
             </button>
-            <button className="px-8 py-4 border-2 border-white text-white rounded-xl hover:bg-white hover:text-[#FF5A3D] transition-all duration-200 font-semibold">
+            <a
+              href={tallyWaitlistUrl}
+              className="px-8 py-4 border-2 border-white text-white rounded-xl hover:bg-white hover:text-[#FF5A3D] transition-all duration-200 font-semibold text-center"
+            >
               Join Waitlist Instead
-            </button>
+            </a>
           </div>
-
-                  </div>
+        </div>
       </div>
     </section>
   );

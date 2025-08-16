@@ -1,6 +1,7 @@
 import React from 'react';
 import { Menu, X } from 'lucide-react';
 import lightModeLogo from '../../public/darkModeLogoText_transparent.png';
+import { startFoundingMemberCheckout, getUTMs } from '../utils/checkout';
 
 interface HeaderProps {
   isMenuOpen: boolean;
@@ -8,6 +9,14 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ isMenuOpen, setIsMenuOpen }) => {
+  const onPreOrder = async () => {
+    try {
+      await startFoundingMemberCheckout(getUTMs());
+    } catch (e) {
+      alert('Could not start checkout. Please try again.');
+    }
+  };
+
   return (
     <header className="bg-[#102A43] backdrop-blur-sm border-b border-gray-100 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -36,7 +45,10 @@ export const Header: React.FC<HeaderProps> = ({ isMenuOpen, setIsMenuOpen }) => 
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center space-x-4">
-            <button className="px-6 py-2 bg-[#FF5A3D] text-white rounded-lg hover:bg-[#FF5A3D]/90 transition-colors font-medium">
+            <button
+              onClick={onPreOrder}
+              className="px-6 py-2 bg-[#FF5A3D] text-white rounded-lg hover:bg-[#FF5A3D]/90 transition-colors font-medium"
+            >
               Pre-Order Now
             </button>
           </div>
@@ -68,7 +80,10 @@ export const Header: React.FC<HeaderProps> = ({ isMenuOpen, setIsMenuOpen }) => 
                 About
               </a>
               <div className="pt-4 border-t border-gray-100 border-opacity-20 flex flex-col space-y-3">
-                <button className="px-6 py-2 bg-[#FF5A3D] text-white rounded-lg hover:bg-[#FF5A3D]/90 transition-colors font-medium text-center">
+                <button
+                  onClick={onPreOrder}
+                  className="px-6 py-2 bg-[#FF5A3D] text-white rounded-lg hover:bg-[#FF5A3D]/90 transition-colors font-medium text-center"
+                >
                   Pre-Order Now
                 </button>
               </div>

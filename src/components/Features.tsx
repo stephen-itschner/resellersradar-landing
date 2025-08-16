@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   Camera,
   Scissors,
@@ -11,6 +11,7 @@ import {
   TrendingUp,
   Shield,
 } from 'lucide-react';
+import { startFoundingMemberCheckout, getUTMs } from '../utils/checkout';
 
 interface FeaturesProps {
   variant: 'b2c' | 'b2b';
@@ -23,6 +24,30 @@ type FeatureItem = {
   video?: string;
   image?: string;
 };
+
+const TALLY_WAITLIST_BASE = 'https://tally.so/r/mYA16J';
+
+function getUtmParams(): Record<string, string> {
+  if (typeof window === 'undefined') return {};
+  const qp = new URLSearchParams(window.location.search);
+  const fields = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'] as const;
+  const out: Record<string, string> = {};
+  for (const key of fields) {
+    const v = qp.get(key);
+    if (v) out[key] = v;
+  }
+  return out;
+}
+
+function buildUrl(base: string, params: Record<string, string | undefined>): string {
+  const u = new URL(base);
+  const sp = new URLSearchParams();
+  for (const [k, v] of Object.entries(params)) {
+    if (v != null && v !== '') sp.set(k, v);
+  }
+  u.search = sp.toString();
+  return u.toString();
+}
 
 export const Features: React.FC<FeaturesProps> = ({ variant }) => {
   const b2cFeatures: FeatureItem[] = [
@@ -121,6 +146,33 @@ export const Features: React.FC<FeaturesProps> = ({ variant }) => {
       ? 'Everything you need to find hidden treasures'
       : 'Enterprise-grade tools for scaling your business';
 
+  const tallyWaitlistUrl = useMemo(() => {
+    const utm = getUtmParams();
+    const params: Record<string, string> = {
+      utm_source: utm.utm_source ?? 'direct',
+      utm_medium: utm.utm_medium ?? 'website',
+      utm_campaign: utm.utm_campaign ?? 'waitlist',
+      ...(utm.utm_term ? { utm_term: utm.utm_term } : {}),
+      ...(utm.utm_content ? { utm_content: utm.utm_content } : {}),
+      page_variant: 'features_bottom_cta_secondary',
+      audience_pitch: variant === 'b2c' ? 'consumer' : 'business',
+    };
+    return buildUrl(TALLY_WAITLIST_BASE, params);
+  }, [variant]);
+
+  const onCheckout = async () => {
+    try {
+      await startFoundingMemberCheckout({
+        ...getUTMs(),
+        page_variant: 'features_bottom_cta_primary',
+        audience_pitch: variant === 'b2c' ? 'consumer' : 'business',
+      });
+    } catch (e: any) {
+      console.error('Checkout error (features):', e?.message || e);
+      alert(e?.message || 'Checkout failed');
+    }
+  };
+
   return (
     <section id="features" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -161,7 +213,7 @@ export const Features: React.FC<FeaturesProps> = ({ variant }) => {
                 {feature.description}
               </p>
 
-              {/* Media box: fixed 9:16 area; videos and image share it */}
+              {/* Media box: fixed 9:16 area */}
               <div
                 className="rounded-xl overflow-hidden border border-[#FF5A3D]/20 mx-auto w-full max-w-[360px] bg-black"
                 style={{ aspectRatio: '9/16' }}
@@ -207,12 +259,18 @@ export const Features: React.FC<FeaturesProps> = ({ variant }) => {
                 : 'Join businesses already using AI to optimize their inventory and pricing strategies.'}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-8 py-4 bg-[#FF5A3D] text-white rounded-xl hover:bg-[#FF5A3D]/90 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+              <button
+                onClick={onCheckout}
+                className="px-8 py-4 bg-[#FF5A3D] text-white rounded-xl hover:bg-[#FF5A3D]/90 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              >
                 Secure Your Founding Member Spot
               </button>
-              <button className="px-8 py-4 border-2 border-[#102A43] text-[#102A43] rounded-xl hover:bg-[#102A43] hover:text-white transition-all duration-200 font-semibold">
+              <a
+                href={tallyWaitlistUrl}
+                className="px-8 py-4 border-2 border-[#102A43] text-[#102A43] rounded-xl hover:bg-[#102A43] hover:text-white transition-all duration-200 font-semibold text-center"
+              >
                 Join Waitlist (Free)
-              </button>
+              </a>
             </div>
           </div>
         </div>
